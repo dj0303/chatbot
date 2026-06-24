@@ -1,7 +1,12 @@
 import streamlit as st
+from langgraph_backend import get_chat_response
+
 
 if 'message_history' not in st.session_state:
     st.session_state['message_history'] = []
+
+if 'thread_id' not in st.session_state:
+    st.session_state['thread_id'] = 'streamlit-chat'
 
 # Loading the conversation history
 for message in st.session_state['message_history']:
@@ -17,6 +22,8 @@ if user_input:
     with st.chat_message("user"):
         st.text(user_input)
 
-    st.session_state['message_history'].append({"role": "assistant", "content": user_input})
+    ai_message = get_chat_response(user_input, thread_id=st.session_state['thread_id'])
+
+    st.session_state['message_history'].append({"role": "assistant", "content": ai_message})
     with st.chat_message("assistant"):
-        st.text(user_input)
+        st.text(ai_message)
