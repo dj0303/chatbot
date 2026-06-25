@@ -28,11 +28,3 @@ graph.add_edge(START, 'chat_node')
 graph.add_edge('chat_node', END)
 
 chatbot = graph.compile(checkpointer=checkpointer)
-
-
-def get_chat_response(user_input: str, thread_id: str = "default-thread"):
-    response = chatbot.invoke(
-        {"messages": [HumanMessage(content=user_input)]},
-        config={"configurable": {"thread_id": thread_id}},
-    )
-    return response["messages"][-1].content
